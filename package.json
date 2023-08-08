@@ -1,0 +1,18 @@
+{
+  "name": "contract-vulnerabilities",
+  "version": "1.0.0",
+  "description": "This project demonstrates two vulnerabilities commonly found in Ethereum smart contracts: reentrancy attack and denial of service. The project utilizes the Hardhat framework for development, compilation, and deployment of smart contracts.",
+  "main": "index.js",
+  "scripts": {
+    "reentrancy": "npx hardhat reentrancyTask --contract \"UnsafeAuction\"",
+    "non-reentrancy": "npx hardhat reentrancyTask --contract \"SafeAuction\"",
+    "dos": "npx hardhat dosTask --contract \"DosAuction\"",
+    "non-dos": "npx hardhat dosTask --contract \"NonDosAuction\""
+  },
+  "author": "Artur Knitel",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.17.1"
+  }
+}
