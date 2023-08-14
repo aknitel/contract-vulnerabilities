@@ -9,7 +9,7 @@ module.exports = async function main(args) {
   await auction.waitForDeployment();
 
   const DosAttackerFactory = await ethers.getContractFactory("DosAttacker", hacker);
-  const attacker = await DosAttackerFactory.deploy(auction.getAddress());
+  const attacker = await DosAttackerFactory.deploy(auction.target);
   await attacker.waitForDeployment();
 
   const txBid = await auction.bid({value: ethers.parseEther('5.0')});
@@ -23,7 +23,7 @@ module.exports = async function main(args) {
   });
   await txUserBid.wait();
 
-  console.log("Auction balance", await ethers.provider.getBalance(auction.getAddress()));
+  console.log("Auction balance", await ethers.provider.getBalance(auction.target));
 
   try {
     const txRefund = await auction.refund();
@@ -33,8 +33,8 @@ module.exports = async function main(args) {
   } finally {
     console.log("Refund progress", await auction.refundProgress());
 
-    console.log("User 1 balance", await ethers.provider.getBalance(user1.getAddress()));
-    console.log("Hacker balance", await ethers.provider.getBalance(hacker.getAddress()));
-    console.log("User 2 balance", await ethers.provider.getBalance(user2.getAddress()));
+    console.log("User 1 balance", await ethers.provider.getBalance(user1.address));
+    console.log("Hacker balance", await ethers.provider.getBalance(hacker.address));
+    console.log("User 2 balance", await ethers.provider.getBalance(user2.address));
   }
 }
